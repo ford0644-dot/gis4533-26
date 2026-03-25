@@ -33,15 +33,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Broken Web Map</title>
-    
+    <title>A Broken Web Map</title> 
     <!-- Leaflet CSS stylesheet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
     <!-- start of our CSS styles -->
     <style>
-        h1 {
-            color: white;
+        h1 { 
+            /*Problem: The <h1> text was white, but the page background was also white
+            Tool: Elements tab showed that thecolor was white.
+            Fix: Changed the text color to black.*/
+            color: black;
         }
         .map {
             border: 4px solid red;
@@ -54,23 +56,43 @@
         <h1>A Working Web Map</h1>
     </div>
     
-    <div id="map" style="width: 600px; height: 400px;"></div>
+    <div class="map" id="map" style="width: 600px; height: 400px;"></div> 
+    <!-- Problem: The CSS styles the class, but the div only had an ID and no class,
+     that is why the red border never appeared.
+     Tool: Elements tab showed the div had no class applied.
+     Fix: Added class="map" to the map div-->
     
     <!-- start of our JavaScript code -->
+     <!-- Leaflet JavaScript library -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!--Problem: Java was ran before the Leaflet map was loaded
+        Tool: Console error that said L is not dinfined on the line
+        Fix: Moved the whole script below the leaflet script of leaflet could load first -->
     <script>
         // Initialize the map
-        let map = L.map('mapElement')
+        let map = L.map('map')
+         // Problem: The map was try to load an element into mapElement but that one doest exsit
+        // the ID is just map
+        // Tool: Console error pointed to this line
+        // Fix: Changed mapElement to map
+       
         // Center the map on UMD campus, and set the zoom level
-        map.setView([-92.08, 46.82], 15);
-        
+        map.setView([46.82, -92.08], 15);
+        //Problem: These are the wrong coordients for the UMD campus, 
+        // they should be swapped
+        //Tool: Map was is the wrong location, just vizually can see that
+        //Fix: Swapped the N and W 
+
         // Add OpenStreetMap tiles
-        const tiles = L.tileLayer('https://tile.openstreetmap.orgg/{z}/{x}/{y}.png', {
+        //Problem: The URL .org had a typo, so it wasnt loading anything
+        //Tool: Console error that said failed to load png
+        //FixL Changed .orgg to .org
+        const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
     </script>
-        
-    <!-- Leaflet JavaScript library -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    
 </body>
 </html>
