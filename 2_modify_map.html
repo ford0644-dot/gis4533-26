@@ -19,42 +19,115 @@
     AI use: you can ask questions of AI (such as "explain what this line of code does" or "how do I create a popup in Leaflet?") 
     But try and write the code yourself. 
 -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Most Basic Web Map</title>
-    
+
     <!-- Leaflet CSS stylesheet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
-    <style></style>
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <style>
+      /*Styles for map, set widht, height, border, and center it on the page*/
+        #map {
+            width: 800px;
+            height: 600px;
+            border: 4px solid #000000;
+            border-radius: 8px;
+            margin: 0 auto;
+        }
+        /*Styles for the header, set padding aka background box, text alignment, and background color to green*/
+        .header {
+            padding: 10px;
+            text-align: center;
+            background: #ACF39D;
+        }
+
+          /*Styles for the paragraph, text alignment, and background color to light blue*/
+        body {
+            font-family: 'ITC stone sans', sans-serif;
+            background: #ADECFF;
+            align-items: center;
+        }
+    </style>
+    <!--- this is where we add the style stuff-->
+  </head>
+  <body>
     <!-- Header at the top of the page -->
     <div class="header">
-        <h1>A Mostly Basic Web Map</h1>
-        <h3>by: Your Name Here</h3>
+      <h1>My Favorite Places in Duluth</h1>
+      <h3>by: Sydney Ford</h3>
+      <p>
+        This map shows some of my favorite places in Duluth, Minnesota. Each spot that I love has a 
+        marker on the map, and when you click on the marker, you will get information about that place. 
+        There is a wide variety of places on this map, including Dovetail Cafe & Marketplace, Glensheen Mansion, and Park Point. 
+        I hope you enjoy learning about these places as much as I do!</p>
     </div>
-    <div id="map" style="width: 600px; height: 400px;"></div>
-    
+    <div id="map"></div>
+
     <!-- Leaflet JavaScript library -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
-    <script>
-        // Initialize the map, center it on UMD campus, and set the zoom level
-        const map = L.map('map').setView([46.82, -92.08], 13);
-
-        // Add OpenStreetMap tiles
-        const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
-
-        // Add a marker for the UMD campus
-        const marker = L.marker([46.82, -92.085]).addTo(map);
-        marker.bindPopup("<b>University of Minnesota Duluth</b><br>A great place to learn about GIS!").openPopup();
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+      refererPolicy: 'strict-origin-when-cross-origin'
     </script>
-</body>
+
+    <script>
+      // Initialize the map, center it on UMD campus, and set the zoom level
+      //Changed the center of the map to be centered so all the markers can be seen when you load the map
+      const map = L.map("map").setView([46.77, -92.08], 12);
+
+      //National Geographic basemap
+      //Replacing the default open street map basemap
+      var Esri_NatGeoWorldMap = L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}",
+        {
+          attribution:
+            "Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC",
+          maxZoom: 16,
+        },
+      );
+      Esri_NatGeoWorldMap.addTo(map);
+
+      // Add a marker for the UMD campus
+      const marker = L.marker([46.80, -92.085]).addTo(map);
+      marker
+        .bindPopup(
+          "<b>University of Minnesota Duluth</b><br>A great place to learn about GIS!",
+        );
+
+      //Marker for Dovetail 
+      //Popup includes and image of the inside of the cafe
+      const marker2 = L.marker([46.768513, -92.1227974]).addTo(map);
+      marker2
+        .bindPopup(
+          "<b>Dovetail Cafe & Marketplace</b><br>" +
+              "<img src='https://cdn.shortpixel.ai/spai/q_glossy+w_977+h_732+to_webp+ret_img/onlakesuperior.com/wp-content/uploads/2024/03/IMG_7304.jpeg' width='300' height='200'><br>" +
+            "A cozy cafe with a warm atmosphere that is a great place to get a coffee and hangout or study!",
+        );
+      
+      //Marker for Glensheen Mansion
+      //Popup includes a video tour of the mansion from YouTube
+      const marker3 = L.marker([46.815159, -92.051744]).addTo(map);
+      marker3
+        .bindPopup(
+          "<b>Glensheen Mansion</b><br>" +
+            "<iframe width='300' height='315' src='https://www.youtube.com/embed/i2SlREq1zqE?si=oKbb9Di1vlIjFOSL' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' referrerpolicy='strict-origin-when-cross-origin' allowfullscreen></iframe><br>" +
+            "A 39 room historic estate filled with stunning architecture, beautiful gardens, and stories of the past!",
+        );
+      
+      //Marker for Park Point
+      //Popup includes an image of the beach at Park Point
+      const marker4 = L.marker([46.734395, -92.054747]).addTo(map);
+      marker4
+        .bindPopup(
+          "<b>Park Point</b><br>" +
+          "<img src='https://www.superiortrails.com/2013images/parkpoint1000210.jpg' width='250' height='100'><br>" +
+          "A great place to relax and enjoy the lake!",
+        );
+    </script>
+  </body>
 </html>
