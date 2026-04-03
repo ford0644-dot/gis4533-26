@@ -46,40 +46,52 @@
     AI use: you can use AI as much as you like, but make sure to understand and verify the code it generates.
     I expect every block of code to have a comment above it describing what it does and how it works. 
 -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Most Basic Web Map</title>
-    
+
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
     <style></style>
-</head>
-<body>
-    <div id="map" style="width: 600px; height: 400px;"></div>
-    
+  </head>
+  <body>
+    <div id="map" style="width: 600px; height: 400px"></div>
+
     <!-- Leaflet JavaScript -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
-    <script>
-        // Initialize the map, center it on UMD campus, and set the zoom level
-        const map = L.map('map').setView([46.82, -92.08], 13);
 
-        //loads in the atendance area GeoJSON data and adds it to the map        
-        fetch("duluth_school_attendance_areas.json")
-    .then(response => response.json())
-    .then(data => {
-        L.geoJSON(data).addTo(map);
-    });
-    
-        // Add OpenStreetMap tiles
-        const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
+    <script>
+      // Initialize the map, center it on UMD campus, and set the zoom level
+      const map = L.map("map").setView([46.82, -92.08], 13);
+
+      // Add OpenStreetMap tiles
+      const tiles = L.tileLayer(
+        "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+          maxZoom: 19,
+          attribution:
+            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        },
+      ).addTo(map);
+
+      //random color generator function to be used in the style function for the GeoJSON layer
+      function getRandomColor() {
+        const letters = "0123456789ABCDEF";
+        let color = "#";
+        for (let i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+      }
+
+     
     </script>
-</body>
+  </body>
 </html>
