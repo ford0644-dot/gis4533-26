@@ -108,6 +108,7 @@
     CartoDB_Voyager.addTo(map);
 
       //random color generator function to be used in the style function for the GeoJSON layer
+      //got the code from the stack overflow link
       function getRandomColor() {
         const letters = "0123456789ABCDEF";
         let color = "#";
@@ -116,16 +117,19 @@
         }
         return color;
       }
+      //style funvtion, defines the visuals the geojson file
       function style(feature) {
         return {
           color: "#333", // outline color
-          weight: 1, // outline thickness
-          fillColor: getRandomColor(), // random fill color
-          fillOpacity: 0.6, // transparency
+          weight: 1, // outline thickness/ boundary line
+          fillColor: getRandomColor(), // random fill color from the color function
+          fillOpacity: 0.6, // transparency of the fill color
         };
       }
 
       //Function for popups that lists the schools in each attendance area when clicked
+      //Runs once for each polygon in the geojson file
+      //Extracts the school names from the geojson attributes and creates the html for the popup
       function onEachFeature(feature, layer) {
         // Extract school names from the GeoJSON attributes
         const elem = feature.properties.ELEM_NAME;
