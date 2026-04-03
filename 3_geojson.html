@@ -90,7 +90,7 @@
         }
         return color;
       }
- function style(feature) {
+      function style(feature) {
         return {
           color: "#333", // outline color
           weight: 1, // outline thickness
@@ -99,15 +99,33 @@
         };
       }
 
-      //Loads the geojson file and applies the style function to the features
+      //Function for popups that lists the schools in each attendance area when clicked
+      function onEachFeature(feature, layer) {
+        // Extract school names from the GeoJSON attributes
+        const elem = feature.properties.ELEM_NAME;
+        const midd = feature.properties.MIDD_NAME;
+        const high = feature.properties.HIGH_NAME;
+
+        //The pop up html that displays the school names for that area
+        const popupContent = `
+        <strong>Attendance Area</strong><br>
+        <b>Elementary School:</b> ${elem}<br>
+        <b>Middle School:</b> ${midd}<br>
+        <b>High School:</b> ${high}
+    `;
+
+        layer.bindPopup(popupContent);
+      }
+
+      //Loads the geojson file
       fetch("duluth_school_attendance_areas.json")
         .then((response) => response.json())
         .then((data) => {
           L.geoJSON(data, {
-            style: style,
+            style: style,      //applies the style function to the geojson layer
+            onEachFeature: onEachFeature,  //applies the onEachFeature function to the geojson layer to create popups
           }).addTo(map);
         });
-     
     </script>
   </body>
 </html>
