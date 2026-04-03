@@ -58,34 +58,54 @@
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     />
+
     <!--My styles i added-->
     <style>
-     </style>
+      body {
+        font-family: Noto Sans, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #e5f4ff;
+      }
+
+      header {
+        background: #e5f4ff;
+        text-align: center;
+      }
+
+      #map {
+        width: 90%;
+        height: 75vh; /* 80% of viewport height */
+        margin: auto;
+      }
+    </style>
   </head>
   <body>
     <header>
       <h1>Duluth School Attendance Areas</h1>
       <h3>By: Sydney Ford</h3>
-      <p>A thematic map showing the school attendance areas for Duluth Public Schools.</p>
+      <p>This map shows the attendance areas for the Duluth Public School District, with each region represented by a different color.
+        This map is interactive, so you can click on each attendance area to see the schools that are located within it.
+        You can see the elementary, middle, and high schools serve that part of the city. The data for this map was sourced from the
+         Minnesota Department of Education using leaflet.</p>
+      </p>
     </header>
-    <div id="map" style="width: 600px; height: 400px"></div>
+    <div id="map"></div>
 
     <!-- Leaflet JavaScript -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
       // Initialize the map, center it on UMD campus, and set the zoom level
-      const map = L.map("map").setView([46.82, -92.08], 13);
+      const map = L.map("map").setView([46.82, -92.08], 10);
 
-      // Add OpenStreetMap tiles
-      const tiles = L.tileLayer(
-        "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-        {
-          maxZoom: 19,
-          attribution:
-            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        },
-      ).addTo(map);
+      //Changed base map to a CARTO Voyager basemap, which is lighter than the last one
+      var CartoDB_Voyager = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+	    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	    subdomains: 'abcd',
+	    maxZoom: 20
+  });
+    CartoDB_Voyager.addTo(map);
 
       //random color generator function to be used in the style function for the GeoJSON layer
       function getRandomColor() {
@@ -115,6 +135,7 @@
         //The pop up html that displays the school names for that area
         const popupContent = `
         <strong>Attendance Area</strong><br>
+        <br>
         <b>Elementary School:</b> ${elem}<br>
         <b>Middle School:</b> ${midd}<br>
         <b>High School:</b> ${high}
