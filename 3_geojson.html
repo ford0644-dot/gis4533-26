@@ -68,6 +68,13 @@
         // Initialize the map, center it on UMD campus, and set the zoom level
         const map = L.map('map').setView([46.82, -92.08], 13);
 
+        //loads in the atendance area GeoJSON data and adds it to the map        
+        fetch("duluth_school_attendance_areas.json")
+    .then(response => response.json())
+    .then(data => {
+        L.geoJSON(data).addTo(map);
+    });
+    
         // Add OpenStreetMap tiles
         const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
