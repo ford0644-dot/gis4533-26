@@ -90,7 +90,23 @@
         }
         return color;
       }
+ function style(feature) {
+        return {
+          color: "#333", // outline color
+          weight: 1, // outline thickness
+          fillColor: getRandomColor(), // random fill color
+          fillOpacity: 0.6, // transparency
+        };
+      }
 
+      //Loads the geojson file and applies the style function to the features
+      fetch("duluth_school_attendance_areas.json")
+        .then((response) => response.json())
+        .then((data) => {
+          L.geoJSON(data, {
+            style: style,
+          }).addTo(map);
+        });
      
     </script>
   </body>
