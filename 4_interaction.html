@@ -97,19 +97,17 @@
     </header>
     <div id="map"></div>
 
-<!-- Leaflet JS -->
+<!-- Leaflet Java Script-->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <!-- Leaflet-omnivore for CSV loading -->
 <script src="https://unpkg.com/leaflet-omnivore@0.3.4/leaflet-omnivore.min.js"></script>
 
 <script>
-// ------------------------------------------------------------
 // Initialize the map
-// ------------------------------------------------------------
 const map = L.map("map").setView([46.82, -92.08], 10);
 
-// Basemap
+// Basemap is CartoDB Voyager (clean and simple)
 var CartoDB_Voyager = L.tileLayer(
   "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
   {
@@ -119,31 +117,31 @@ var CartoDB_Voyager = L.tileLayer(
   }
 ).addTo(map);
 
-// ------------------------------------------------------------
-// Define school icon
-// ------------------------------------------------------------
-const schoolIcon = L.icon({
-  iconUrl: "school.png",
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
-  popupAnchor: [0, -35]
+// Define school icon 
+// Transparent PNG file of a schoolhouse downloaded from https://www.transparentpng.com/cats/school-1349.html
+const schoolIcon = L.icon({ 
+  iconUrl: "school.png",      //path to the image file
+  iconSize: [30, 30],        //Display size in pixels
+  iconAnchor: [15, 30],      //Anchor point of bottom center of icon
+  popupAnchor: [0, -26]      //Popup open above icon
 });
 
 // Function to determine popup color based on school type
+//Returns background color for the popup based in the school level
 function getPopupColor(type) {
   const colors = {
-    'Elementary': '#FFE5B4',
-    'Middle': '#B4D7FF',
-    'High': '#D7B4FF'
-  };
-  return colors[type] || '#FFFFFF';
+    'Elementary': '#FFE5B4',  //Warm yellow
+    'Middle': '#B4D7FF',      //Light blue
+    'High': '#D7B4FF'         //light purple
+  }; 
+  return colors[type] || '#FFFFFF'; //white if there is an unknown
 }
 
-// ------------------------------------------------------------
 // Load CSV of schools as markers
-// ------------------------------------------------------------
+//ominivore.csv loads the CSV file and creates a marker for each row.
 let schoolLayer = omnivore.csv("duluth_schools.csv")
   .on("ready", function () {
+    //once csv is loaded, make each maker
     this.eachLayer(function (marker) {
       const props = marker.feature.properties;
 
@@ -171,7 +169,7 @@ let schoolLayer = omnivore.csv("duluth_schools.csv")
         </div>
       `);
 
-      // Click school → highlight attendance area
+      // When marker is clicked, highlight its attendance area
       marker.on("click", function () {
         highlightAreaForSchool(props.SchoolName);
       });
@@ -179,9 +177,7 @@ let schoolLayer = omnivore.csv("duluth_schools.csv")
   })
   .addTo(map);   
 
-// ------------------------------------------------------------
 // Random color generator for polygons
-// ------------------------------------------------------------
 function getRandomColor() {
   const letters = "0123456789ABCDEF";
   let color = "#";
@@ -191,9 +187,7 @@ function getRandomColor() {
   return color;
 }
 
-// ------------------------------------------------------------
 // Style function for attendance area polygons
-// ------------------------------------------------------------
 function style(feature) {
   return {
     color: "#333",
@@ -203,10 +197,13 @@ function style(feature) {
   };
 }
 
-// ------------------------------------------------------------
-// OPTION 2: Click attendance area → highlight schools
-// ------------------------------------------------------------
+// OPTION 2: Click attendance area, highlight schools
+//when a polygon is clicked, this function loops through all the school markers and 
+// checks if the school name matches any of the schools in the attendance area properties. 
+// If it does, it highlights that marker by setting its opacity to 1 and bringing it to the front. 
+// If it doesn't match, it dims the marker by setting its opacity to 0.3.
 function highlightSchoolsForArea(feature) {
+  //extract the names of the shcools from the polygon properties
   const elem = feature.properties.ELEM_NAME;
   const midd = feature.properties.MIDD_NAME;
   const high = feature.properties.HIGH_NAME;
@@ -214,28 +211,30 @@ function highlightSchoolsForArea(feature) {
   schoolLayer.eachLayer(function (marker) {
     const props = marker.feature.properties;
 
+    //check if the marks school matgces any of the schools in the attendance area
     const isMatch =
       props.SchoolName === elem ||
       props.SchoolName === midd ||
       props.SchoolName === high;
 
     if (isMatch) {
+      // matching school - highlight it
       marker.setStyle?.({ opacity: 1, fillOpacity: 1 });
       marker.setZIndexOffset?.(1000);
     } else {
+      // non-matching school - dim it
       marker.setStyle?.({ opacity: 0.3, fillOpacity: 0.3 });
       marker.setZIndexOffset?.(0);
     }
   });
 }
 
-// ------------------------------------------------------------
-// OPTION B: Click school → highlight attendance area
-// ------------------------------------------------------------
+//highlight the attendance area for a school when its marker is clicked.
 function highlightAreaForSchool(schoolName) {
   attendanceLayer.eachLayer(function (layer) {
     const props = layer.feature.properties;
 
+    //check if the polygon refrences the clicked school
     const isMatch =
       props.ELEM_NAME === schoolName ||
       props.MIDD_NAME === schoolName ||
@@ -262,9 +261,7 @@ function highlightAreaForSchool(schoolName) {
   });
 }
 
-// ------------------------------------------------------------
 // Reset polygons + schools when clicking map background
-// ------------------------------------------------------------
 map.on("click", function () {
   // Reset polygons
   attendanceLayer.eachLayer(function (layer) {
@@ -282,9 +279,8 @@ map.on("click", function () {
   });
 });
 
-// ------------------------------------------------------------
+
 // Popup + click event for each polygon
-// ------------------------------------------------------------
 function onEachFeature(feature, layer) {
   const elem = feature.properties.ELEM_NAME;
   const midd = feature.properties.MIDD_NAME;
@@ -305,9 +301,7 @@ function onEachFeature(feature, layer) {
   });
 }
 
-// ------------------------------------------------------------
 // Load GeoJSON attendance areas
-// ------------------------------------------------------------
 let attendanceLayer;
 
 fetch("duluth_school_attendance_areas.json")
@@ -318,4 +312,4 @@ fetch("duluth_school_attendance_areas.json")
       onEachFeature: onEachFeature,
     }).addTo(map);
   });
-</script>
+</script> 
