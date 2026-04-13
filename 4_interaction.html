@@ -181,6 +181,12 @@ function highlightSchoolsForArea(feature) {
   });
 }
 
+function resetSchoolStyles() {
+  schoolLayer.eachLayer(function(marker) {
+    marker.setStyle?.({ opacity: 1, fillOpacity: 1 });
+    marker.setZIndexOffset?.(0);
+  });
+}
 
 // Popup + click event for each polygon
 function onEachFeature(feature, layer) {
@@ -204,12 +210,15 @@ function onEachFeature(feature, layer) {
 }
 
 // Load GeoJSON attendance areas
+let attendanceLayer;
+
 fetch("duluth_school_attendance_areas.json")
-  .then((response) => response.json())
-  .then((data) => {
-    L.geoJSON(data, {
+  .then(response => response.json())
+  .then(data => {
+    attendanceLayer = L.geoJSON(data, {
       style: style,
-      onEachFeature: onEachFeature,
+      onEachFeature: onEachFeature
     }).addTo(map);
   });
+
 </script>
