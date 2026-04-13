@@ -97,14 +97,16 @@
     </header>
     <div id="map"></div>
 
-   <!-- Leaflet JS -->
+<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <!-- Leaflet-omnivore for CSV loading -->
 <script src="https://unpkg.com/leaflet-omnivore@0.3.4/leaflet-omnivore.min.js"></script>
 
 <script>
+// ------------------------------------------------------------
 // Initialize the map
+// ------------------------------------------------------------
 const map = L.map("map").setView([46.82, -92.08], 10);
 
 // Basemap
@@ -117,28 +119,70 @@ var CartoDB_Voyager = L.tileLayer(
   }
 ).addTo(map);
 
+// ------------------------------------------------------------
+// Define school icon
+// ------------------------------------------------------------
+const schoolIcon = L.icon({
+  iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
+  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+// Function to determine popup color based on school type
+function getPopupColor(type) {
+  const colors = {
+    'Elementary': '#FFE5B4',
+    'Middle': '#B4D7FF',
+    'High': '#D7B4FF'
+  };
+  return colors[type] || '#FFFFFF';
+}
+
+// ------------------------------------------------------------
 // Load CSV of schools as markers
+// ------------------------------------------------------------
 let schoolLayer = omnivore.csv("duluth_schools.csv")
   .on("ready", function () {
     this.eachLayer(function (marker) {
       const props = marker.feature.properties;
 
-      // Popup for each school
+      // Apply custom PNG icon
+      marker.setIcon(schoolIcon);
+
+      // Color‑coded popup
       marker.bindPopup(`
-        <strong>${props.SchoolName}</strong><br>
-        <b>Type:</b> ${props.Type}<br>
-        <b>Grades:</b> ${props.Grades}
+        <div style="
+          font-family: Noto Sans, sans-serif;
+          padding: 10px;
+          border-radius: 8px;
+          background: ${getPopupColor(props.Type)};
+          border: 1px solid #999;
+          width: 220px;
+        ">
+          <h3 style="margin: 0; font-size: 18px;">
+            ${props.SchoolName}
+          </h3>
+
+          <p style="margin: 8px 0 0; font-size: 14px;">
+            <b>Type:</b> ${props.Type}<br>
+            <b>Grades:</b> ${props.Grades}
+          </p>
+        </div>
       `);
 
-      // OPTION B: Click school → highlight attendance area
+      // Click school → highlight attendance area
       marker.on("click", function () {
         highlightAreaForSchool(props.SchoolName);
       });
     });
-  })
-  .addTo(map);
+  });
 
+// ------------------------------------------------------------
 // Random color generator for polygons
+// ------------------------------------------------------------
 function getRandomColor() {
   const letters = "0123456789ABCDEF";
   let color = "#";
@@ -148,7 +192,9 @@ function getRandomColor() {
   return color;
 }
 
+// ------------------------------------------------------------
 // Style function for attendance area polygons
+// ------------------------------------------------------------
 function style(feature) {
   return {
     color: "#333",
@@ -157,6 +203,10 @@ function style(feature) {
     fillOpacity: 0.6,
   };
 }
+
+// ------------------------------------------------------------
+// OPTION 2: Click attendance area → highlight schools
+// ------------------------------------------------------------
 function highlightSchoolsForArea(feature) {
   const elem = feature.properties.ELEM_NAME;
   const midd = feature.properties.MIDD_NAME;
@@ -180,6 +230,9 @@ function highlightSchoolsForArea(feature) {
   });
 }
 
+// ------------------------------------------------------------
+// OPTION B: Click school → highlight attendance area
+// ------------------------------------------------------------
 function highlightAreaForSchool(schoolName) {
   attendanceLayer.eachLayer(function (layer) {
     const props = layer.feature.properties;
@@ -210,7 +263,9 @@ function highlightAreaForSchool(schoolName) {
   });
 }
 
+// ------------------------------------------------------------
 // Reset polygons + schools when clicking map background
+// ------------------------------------------------------------
 map.on("click", function () {
   // Reset polygons
   attendanceLayer.eachLayer(function (layer) {
@@ -228,14 +283,9 @@ map.on("click", function () {
   });
 });
 
-function getPopupColor(type) {
-  if (type === "Elementary") return "#d1e7dd";   // soft green
-  if (type === "Middle") return "#fff3cd";       // soft yellow
-  if (type === "High") return "#cfe2ff";         // soft blue
-  return "#f8f9fa";                              // default gray
-}
-
+// ------------------------------------------------------------
 // Popup + click event for each polygon
+// ------------------------------------------------------------
 function onEachFeature(feature, layer) {
   const elem = feature.properties.ELEM_NAME;
   const midd = feature.properties.MIDD_NAME;
@@ -250,13 +300,15 @@ function onEachFeature(feature, layer) {
 
   layer.bindPopup(popupContent);
 
-  //
+  // OPTION 2 click behavior
   layer.on("click", function () {
     highlightSchoolsForArea(feature);
   });
 }
 
+// ------------------------------------------------------------
 // Load GeoJSON attendance areas
+// ------------------------------------------------------------
 let attendanceLayer;
 
 fetch("duluth_school_attendance_areas.json")
