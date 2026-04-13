@@ -51,3 +51,165 @@
 -->
 
 <!-- Paste your code from assignment 3 here -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Most Basic Web Map</title>
+
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <!--My styles i added-->
+    <style>
+      body {
+        font-family: Noto Sans, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #e5f4ff;
+      }
+
+      header {
+        background: #e5f4ff;
+        text-align: center;
+      }
+
+      #map {
+        width: 90%;
+        height: 75vh; /* 80% of viewport height */
+        margin: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Duluth School Attendance Areas</h1>
+      <h3>By: Sydney Ford</h3>
+      <p>This map shows the attendance areas for the Duluth Public School District, with each region represented by a different color.
+        This map is interactive, so you can click on each attendance area to see the schools that are located within it.
+        You can see the elementary, middle, and high schools serve that part of the city. The data for this map was sourced from the
+         Minnesota Department of Education using leaflet.</p>
+      </p>
+    </header>
+    <div id="map"></div>
+
+    <!-- Leaflet JavaScript -->
+    <!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Leaflet-omnivore for CSV loading -->
+<script src="https://unpkg.com/leaflet-omnivore@0.3.4/leaflet-omnivore.min.js"></script>
+
+<script>
+// ------------------------------------------------------------
+// Initialize the map
+// ------------------------------------------------------------
+const map = L.map("map").setView([46.82, -92.08], 10);
+
+// Basemap
+var CartoDB_Voyager = L.tileLayer(
+  "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+  {
+    attribution:
+      '&copy; OpenStreetMap contributors &copy; CARTO',
+    subdomains: "abcd",
+    maxZoom: 20,
+  }
+).addTo(map);
+
+// Load CSV of schools as markers
+let schoolLayer = omnivore.csv("duluth_schools.csv")
+  .on("ready", function () {
+    this.eachLayer(function (marker) {
+      const props = marker.feature.properties;
+
+      marker.bindPopup(`
+        <strong>${props.SchoolName}</strong><br>
+        <b>Type:</b> ${props.Type}<br>
+        <b>Grades:</b> ${props.Grades}
+      `);
+    });
+  })
+  .addTo(map);
+
+// Random color generator for polygons
+function getRandomColor() {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+// Style function for attendance area polygons
+function style(feature) {
+  return {
+    color: "#333",
+    weight: 1,
+    fillColor: getRandomColor(),
+    fillOpacity: 0.6,
+  };
+}
+
+// Function to filter schools when clicking an attendance area
+function highlightSchoolsForArea(feature) {
+  const elem = feature.properties.ELEM_NAME;
+  const midd = feature.properties.MIDD_NAME;
+  const high = feature.properties.HIGH_NAME;
+
+  schoolLayer.eachLayer(function(marker) {
+    const props = marker.feature.properties;
+
+    const isMatch =
+      props.SchoolName === elem ||
+      props.SchoolName === midd ||
+      props.SchoolName === high;
+
+    if (isMatch) {
+      // Highlight matching schools
+      marker.setStyle?.({ opacity: 1, fillOpacity: 1 });
+      marker.setZIndexOffset?.(1000);
+    } else {
+      // Dim non-matching schools
+      marker.setStyle?.({ opacity: 0.3, fillOpacity: 0.3 });
+      marker.setZIndexOffset?.(0);
+    }
+  });
+}
+
+
+// Popup + click event for each polygon
+function onEachFeature(feature, layer) {
+  const elem = feature.properties.ELEM_NAME;
+  const midd = feature.properties.MIDD_NAME;
+  const high = feature.properties.HIGH_NAME;
+
+  const popupContent = `
+    <strong>Attendance Area</strong><br><br>
+    <b>Elementary School:</b> ${elem}<br>
+    <b>Middle School:</b> ${midd}<br>
+    <b>High School:</b> ${high}
+  `;
+
+  layer.bindPopup(popupContent);
+
+  // Add click event to filter schools
+  layer.on("click", function () {
+    highlightSchoolsForArea(feature);
+  });
+}
+
+// Load GeoJSON attendance areas
+fetch("duluth_school_attendance_areas.json")
+  .then((response) => response.json())
+  .then((data) => {
+    L.geoJSON(data, {
+      style: style,
+      onEachFeature: onEachFeature,
+    }).addTo(map);
+  });
+</script>
