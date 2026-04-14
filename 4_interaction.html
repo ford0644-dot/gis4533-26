@@ -161,17 +161,23 @@ let schoolLayer = omnivore.csv("duluth_schools.csv")
       marker.bindPopup(`
         <div style="
           font-family: Noto Sans, sans-serif;
-          padding: 10px;
-          border-radius: 8px;
+          padding: 14px;
+          border-radius: 10px;
           background: ${getPopupColor(props.Type)};
-          border: 1px solid #999;
-          width: 220px;
+          border: 1px solid #666;
+          width: 240px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.25);
         ">
-          <h3 style="margin: 0; font-size: 18px;">
+          <h2 style="
+            margin: 0 0 8px 0;
+            font-size: 20px;
+            font-weight: 700;
+            color: #222;
+          ">
             ${props.SchoolName}
-          </h3>
+          </h2>
 
-          <p style="margin: 8px 0 0; font-size: 14px;">
+          <p style="margin: 0; font-size: 15px;">
             <b>Type:</b> ${props.Type}<br>
             <b>Grades:</b> ${props.Grades}
           </p>
@@ -180,13 +186,14 @@ let schoolLayer = omnivore.csv("duluth_schools.csv")
 
       // When marker is clicked, highlight its attendance area
       marker.on("click", function () {
-        if (attendanceLayerLoaded) {
-          highlightAreaForSchool(props.SchoolName);
-        }
+        highlightAreaForSchool(props.SchoolName);
+
+        setTimeout(() => {
+          map.panTo(marker.getLatLng());
+        }, 400);
       });
     });
-  })
-  .addTo(map);   
+  }).addTo(map);   
 
 // Random color generator for polygons
 function getRandomColor() {
