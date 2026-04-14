@@ -83,6 +83,12 @@
         height: 75vh; /* 80% of viewport height */
         margin: auto;
       }
+
+      .leaflet-popup-content {
+        max-width: 260px !important;
+        font-size: 15px;
+        line-height: 1.4;
+      }
     </style>
   </head>
   <body>
@@ -216,11 +222,13 @@ function highlightSchoolsForArea(feature) {
   schoolLayer.eachLayer(function (marker) {
     const props = marker.feature.properties;
 
-    //check if the marks school matgces any of the schools in the attendance area
-    const isMatch =
-      props.SchoolName === elem ||
-      props.SchoolName === midd ||
-      props.SchoolName === high;
+  //check if the marks school matgces any of the schools in the attendance area
+  const school = props.SchoolName.toUpperCase();
+
+  const isMatch =
+    school.includes(elem.toUpperCase()) ||
+    school.includes(midd.toUpperCase()) ||
+    school.includes(high.toUpperCase());
 
     if (isMatch) {
       // matching school - highlight it
@@ -240,10 +248,13 @@ function highlightAreaForSchool(schoolName) {
     const props = layer.feature.properties;
 
     //check if the polygon refrences the clicked school
-    const isMatch =
-      props.ELEM_NAME === schoolName ||
-      props.MIDD_NAME === schoolName ||
-      props.HIGH_NAME === schoolName;
+  const name = schoolName.toUpperCase();
+
+  const isMatch =
+    name.includes(props.ELEM_NAME.toUpperCase()) ||
+    name.includes(props.MIDD_NAME.toUpperCase()) ||
+    name.includes(props.HIGH_NAME.toUpperCase());
+
 
     if (isMatch) {
       // Highlight polygon
