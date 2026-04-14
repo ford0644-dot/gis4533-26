@@ -184,7 +184,7 @@ let schoolLayer = omnivore.csv("duluth_schools.csv")
         </div>
       `);
 
-      // When marker is clicked, highlight its attendance area
+      // When marker is clicked, highlight its attendance area and zoom to it
       marker.on("click", function () {
         highlightAreaForSchool(props.SchoolName);
 
