@@ -87,12 +87,12 @@
   </head>
   <body>
     <header>
-      <h1>Duluth School Attendance Areas</h1>
+      <h1>Duluth Public School Attendance Explorer</h1>
       <h3>By: Sydney Ford</h3>
-      <p>This map shows the attendance areas for the Duluth Public School District, with each region represented by a different color.
-        This map is interactive, so you can click on each attendance area to see the schools that are located within it.
-        You can see the elementary, middle, and high schools serve that part of the city. The data for this map was sourced from the
-         Minnesota Department of Education using leaflet.</p>
+      <p>This interactive map displays the attendance boundaries for Duluth Public Schools, with each area shown in a different color. 
+        School locations are marked with custom icons, and clicking a school highlights the attendance area it serves. 
+        You can also click any attendance zone to see the elementary, middle, and high schools assigned to that part of the city.
+        This map provides a clear, easy‑to‑use way to explore how Duluth’s school district is organized.</p>
       </p>
     </header>
     <div id="map"></div>
@@ -137,6 +137,9 @@ function getPopupColor(type) {
   return colors[type] || '#FFFFFF'; //white if there is an unknown
 }
 
+//lets the ploygons load before the markers so that the markers will be on top of the polygons.
+let attendanceLayerLoaded = false;
+
 // Load CSV of schools as markers
 //ominivore.csv loads the CSV file and creates a marker for each row.
 let schoolLayer = omnivore.csv("duluth_schools.csv")
@@ -171,7 +174,9 @@ let schoolLayer = omnivore.csv("duluth_schools.csv")
 
       // When marker is clicked, highlight its attendance area
       marker.on("click", function () {
-        highlightAreaForSchool(props.SchoolName);
+        if (attendanceLayerLoaded) {
+          highlightAreaForSchool(props.SchoolName);
+        }
       });
     });
   })
@@ -311,5 +316,6 @@ fetch("duluth_school_attendance_areas.json")
       style: style,
       onEachFeature: onEachFeature,
     }).addTo(map);
-  });
+    attendanceLayerLoaded = true;   //polygons are ready
+  }).catch((error) => console.error("Error loading GeoJSON:", error));
 </script> 
