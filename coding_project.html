@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Most Basic Web Map</title>
+
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <!--My styles i added-->
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f7f7f7;
+      }
+
+      header {
+        padding: 20px;
+        background: #003f5c;
+        color: white;
+        text-align: center;
+      }
+
+      #map {
+        height: 90vh;
+        width: 100%;
+      }
+
+      .leaflet-popup-content img {
+        width: 100%;
+        border-radius: 6px;
+        margin-bottom: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Duluth Visitor Guide: Top Local Attractions</h1>
+      <h3>By: Sydney Ford</h3>
+      <p>Welcome to Duluth!<br><br>
+         This map highlights top attractions for visitors attending the FDI World Dental Congress. 
+         Explore parks, museums, historic sites, and local favorites across the city. 
+         Click on points to learn more about each attraction!</p>
+      </p>
+    </header>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
