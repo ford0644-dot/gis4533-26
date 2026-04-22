@@ -26,15 +26,26 @@
         background: #003f5c;
         color: white;
         text-align: center;
-      }
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+        background: rgba(0, 63, 92, 0.9);
+        backdrop-filter: blur(6px);
+}
 
       /* Soft shadow around the map */
       #map {
-        height: calc(90vh - 80px); /* full viewport height minus header */
-        margin-top: 80px; /* space below header */
+        height: calc(100vh - 200px);
+        margin-top: 200px;
         width: 100%;
         box-shadow: 0 0 20px rgba(0,0,0,0.15);
         border-top: 4px solid #003f5c;
+      }
+
+      /* Custom popup styling */
+      .leaflet-popup {
+        max-width: 380px; /* wider popup */
       }
 
       /* Popup card styling */
@@ -214,15 +225,6 @@ Papa.parse("Duluth-Points-Of-Interest-Duluth-Points-Of-Interest.csv", {
 
     });
   }
-});
-
-const marker = L.marker([lat, long], {
-  icon: icon,
-  riseOnHover: true
-}).addTo(map);
-
-marker.bindPopup(popupHtml, {
-  offset: [0, 40]   // pushes popup down 40px
 });
 
 // Legend
