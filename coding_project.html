@@ -101,11 +101,19 @@ const icons = {
 
 // Load csv with PapaParse 
 Papa.parse("data/Duluth-Points-Of-Interest-Duluth-Points-Of-Interest.csv", {
-  download: true,
-  header: true,
-  dynamicTyping: true,
-  complete: function (results) {
+  download: true,  // tells PapaParse to fetch the file from the specified path
+  header: true,    // treats first row as headers
+  dynamicTyping: true, //automatically converts numeric strings into actual numbers
+  complete: function (results) {    // callback function that runs after parsing is complete, with results as the parsed data
     const data = results.data;
+
+    // access the lat and long from each row
+    data.forEach(row => {
+      const lat = row.lat;
+      const long = row.long;
+
+      
+    })
   }
 });
 </script>
