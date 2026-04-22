@@ -35,13 +35,15 @@
 }
 
       /* Soft shadow around the map */
-      #map {
-        height: calc(100vh - 200px);
-        margin-top: 200px;
-        width: 100%;
-        box-shadow: 0 0 20px rgba(0,0,0,0.15);
-        border-top: 4px solid #003f5c;
-      }
+     #map {
+      width: 90%;
+      height: 75vh; /* 80% of viewport height */
+      margin: auto;
+    }
+
+    body {
+      padding-top: 220px; /* space for header */
+    }
 
       /* Custom popup styling */
       .leaflet-popup {
@@ -95,6 +97,7 @@
         font-weight: bold;
       }
 
+      /* Legend styling */
       .legend img {
         width: 22px;        /* controls icon size */
         height: 22px;       /* keeps them square */
@@ -103,12 +106,14 @@
         margin-right: 6px;
       }
 
+      /* Each legend item is a flex container to align icon and text */
       .legend div {
         display: flex;
         align-items: center;
         margin-bottom: 4px;
       }
 
+      /* Legend container styling */
       .legend {
         background: white;
         padding: 10px 14px;
@@ -118,6 +123,7 @@
         line-height: 1.4;
       }
 
+      /
       .legend h4 {
         margin: 0 0 6px;
         font-size: 15px;
