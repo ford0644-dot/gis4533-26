@@ -13,12 +13,14 @@
 
     <!--My styles i added-->
     <style>
+      /* Global styles */
       body {
         margin: 0;
         font-family: Arial, sans-serif;
         background: #f7f7f7;
       }
 
+      /* Header styling */
       header {
         padding: 20px;
         background: #003f5c;
@@ -28,7 +30,8 @@
 
       /* Soft shadow around the map */
       #map {
-        height: 90vh;
+        height: calc(90vh - 80px); /* full viewport height minus header */
+        margin-top: 80px; /* space below header */
         width: 100%;
         box-shadow: 0 0 20px rgba(0,0,0,0.15);
         border-top: 4px solid #003f5c;
@@ -195,12 +198,15 @@ Papa.parse("Duluth-Points-Of-Interest-Duluth-Points-Of-Interest.csv", {
       // create a marker with the appropriate icon based on the attraction type
       const marker = L.marker([lat, long], { icon: icon }).addTo(map);
 
+      // create the HTML content for the popup using the data from the row
        const popupHtml = `
-        <img src="${row["Photo URL"]}" alt="${row.Attraction}">
-        <h3>${row.Attraction}</h3>
-        <p>${row.Description}</p>
-        <p><strong>Address:</strong> ${row.Address}</p>
-        <a href="${row.Website}" target="_blank">Visit Website</a>
+        <div class="popup-card">
+          <img src="${row["Photo URL"]}" alt="${row.Attraction}">
+          <h3>${row.Attraction}</h3>
+          <p>${row.Description}</p>
+          <p><strong>Address:</strong> ${row.Address}</p>
+          <a href="${row.Website}" target="_blank">Visit Website</a>
+        </div>
       `;
 
       // bind the popup to the marker
