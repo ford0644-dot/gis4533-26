@@ -109,20 +109,23 @@ Papa.parse("data/Duluth-Points-Of-Interest-Duluth-Points-Of-Interest.csv", {
 
     // access the lat and long and attraction type from each row
     data.forEach(row => {
-      const lat = row.lat;
-      const long = row.long;
-      const type = row.Attraction;
+      const lat = row["Latitude"];
+      const long = row["Longitude"];
+      const type = row["Atraction Type"];
+
+       const icon = icons[type] || icons["Parks & Nature"];
 
       // create a marker with the appropriate icon based on the attraction type
       const marker = L.marker([lat, long], { icon: icons}).addTo(map);
 
-      const popupHtml = `
+       const popupHtml = `
         <img src="${row["Photo URL"]}" alt="${row.Attraction}">
         <h3>${row.Attraction}</h3>
         <p>${row.Description}</p>
         <p><strong>Address:</strong> ${row.Address}</p>
         <a href="${row.Website}" target="_blank">Visit Website</a>
       `;
+
       // bind the popup to the marker
       marker.bindPopup(popupHtml);
 
