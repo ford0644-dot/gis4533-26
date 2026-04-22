@@ -75,27 +75,27 @@ const icons = {
   // shopping and dining icon
   "Shopping & Dining": L.icon({
     iconUrl: "shopanddining.png",
-    iconsize: [30, 30],
+    iconSize: [30, 30],
   }),
   // parks and nature icon
   "Parks & Nature": L.icon({
     iconUrl: "parkandnature.png",
-    iconsize: [30, 30],
+    iconSize: [30, 30],
   }),
   // historic and cultural icon
   "Historic & Cultural": L.icon({
     iconUrl: "histandcult.png",
-    iconsize: [30, 30],
+    iconSize: [30, 30],
   }),
   // family attractions icon
   "Family Attractions": L.icon({
     iconUrl: "famattract.png",
-    iconsize: [30, 30],
+    iconSize: [30, 30],
   }),
   //local markets icon
   "Local Markets": L.icon({
     iconUrl: "localmarket.png",
-    iconsize: [30, 30],
+    iconSize: [30, 30],
   }),
 };
 
@@ -109,14 +109,14 @@ Papa.parse("data/Duluth-Points-Of-Interest-Duluth-Points-Of-Interest.csv", {
 
     // access the lat and long and attraction type from each row
     data.forEach(row => {
-      const lat = row["Latitude"];
-      const long = row["Longitude"];
+      const lat = row["Lat "];
+      const long = row["Long"];
       const type = row["Atraction Type"];
 
        const icon = icons[type] || icons["Parks & Nature"];
 
       // create a marker with the appropriate icon based on the attraction type
-      const marker = L.marker([lat, long], { icon: icons}).addTo(map);
+      const marker = L.marker([lat, long], { icon: icon }).addTo(map);
 
        const popupHtml = `
         <img src="${row["Photo URL"]}" alt="${row.Attraction}">
