@@ -99,4 +99,13 @@ const icons = {
   }),
 };
 
+// Load csv with PapaParse 
+Papa.parse("data/Duluth-Points-Of-Interest-Duluth-Points-Of-Interest.csv", {
+  download: true,
+  header: true,
+  dynamicTyping: true,
+  complete: function (results) {
+    const data = results.data;
+  }
+});
 </script>
