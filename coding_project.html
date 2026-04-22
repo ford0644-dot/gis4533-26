@@ -121,6 +121,7 @@ Papa.parse("Duluth-Points-Of-Interest-Duluth-Points-Of-Interest.csv", {
       // create a marker with the appropriate icon based on the attraction type
       const marker = L.marker([lat, long], { icon: icon }).addTo(map);
 
+      // create the HTML content for the popup using the data from the rows
        const popupHtml = `
         <img src="${row["Photo URL"]}" alt="${row.Attraction}">
         <h3>${row.Attraction}</h3>
