@@ -107,12 +107,17 @@ Papa.parse("data/Duluth-Points-Of-Interest-Duluth-Points-Of-Interest.csv", {
   complete: function (results) {    // callback function that runs after parsing is complete, with results as the parsed data
     const data = results.data;
 
-    // access the lat and long from each row
+    // access the lat and long and attraction type from each row
     data.forEach(row => {
       const lat = row.lat;
       const long = row.long;
+      const type = row.Attraction;
 
-      
+      // create a marker with the appropriate icon based on the attraction type
+      const marker = L.marker([lat, long], { icon: icons}).addTo(map);
+
+      const popupHtml =
+        <img src="${row.Photo URL}"
     })
   }
 });
