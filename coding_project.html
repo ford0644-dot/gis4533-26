@@ -80,6 +80,36 @@
         text-decoration: none;
         font-weight: bold;
       }
+
+      .legend img {
+        width: 22px;        /* controls icon size */
+        height: 22px;       /* keeps them square */
+        object-fit: contain;
+        vertical-align: middle;
+        margin-right: 6px;
+      }
+
+      .legend div {
+        display: flex;
+        align-items: center;
+        margin-bottom: 4px;
+      }
+
+      .legend {
+        background: white;
+        padding: 10px 14px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      .legend h4 {
+        margin: 0 0 6px;
+        font-size: 15px;
+        color: #003f5c;
+      }
+
     </style>
   </head>
   <body>
@@ -179,4 +209,22 @@ Papa.parse("Duluth-Points-Of-Interest-Duluth-Points-Of-Interest.csv", {
     });
   }
 });
+
+// Legend
+const legend = L.control({ position: "bottomleft" });
+
+legend.onAdd = function () {
+  const div = L.DomUtil.create("div", "legend");
+  div.innerHTML = `
+    <h4>Attraction Types</h4>
+    <div><img src="shopanddine.png"> Shopping & Dining</div>
+    <div><img src="parkandnature.png"> Parks & Nature</div>
+    <div><img src="histandcult.png"> Historic & Cultural</div>
+    <div><img src="famattract.png"> Family Attractions</div>
+    <div><img src="localmarket.png"> Local Markets</div>
+  `;
+  return div;
+};
+
+legend.addTo(map);
 </script>
