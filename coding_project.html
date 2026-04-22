@@ -216,6 +216,15 @@ Papa.parse("Duluth-Points-Of-Interest-Duluth-Points-Of-Interest.csv", {
   }
 });
 
+const marker = L.marker([lat, long], {
+  icon: icon,
+  riseOnHover: true
+}).addTo(map);
+
+marker.bindPopup(popupHtml, {
+  offset: [0, 40]   // pushes popup down 40px
+});
+
 // Legend
 const legend = L.control({ position: "bottomleft" });
 
