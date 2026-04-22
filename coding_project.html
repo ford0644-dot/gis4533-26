@@ -213,8 +213,11 @@ Papa.parse("Duluth-Points-Of-Interest-Duluth-Points-Of-Interest.csv", {
 // Legend
 const legend = L.control({ position: "bottomleft" });
 
+// Create the legend content
 legend.onAdd = function () {
+  // Create a div element for the legend
   const div = L.DomUtil.create("div", "legend");
+  // Set the inner HTML of the legend with the attraction types and their corresponding icons
   div.innerHTML = `
     <h4>Attraction Types</h4>
     <div><img src="shopanddine.png"> Shopping & Dining</div>
