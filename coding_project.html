@@ -34,7 +34,7 @@
       /* Soft shadow around the map */
      #map {
       position: absolute;
-      top: var(--header-height);
+      top: 0;
       left: 0;
       right: 0;
       bottom: 0;
@@ -205,6 +205,7 @@ Papa.parse("Duluth-Points-Of-Interest-Duluth-Points-Of-Interest.csv", {
       const long = row["Long"];
       const type = row["Atraction Type"];
 
+      // get the appropriate icon for the attraction type, defaulting to "Parks & Nature" if type is missing or unrecognized
        const icon = icons[type] || icons["Parks & Nature"];
 
       // create a marker with the appropriate icon based on the attraction type
@@ -247,5 +248,6 @@ legend.onAdd = function () {
   return div;
 };
 
+// Add the legend to the map
 legend.addTo(map);
 </script>
