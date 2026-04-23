@@ -16,29 +16,28 @@
       /* Global styles */
       body {
         margin: 0;
-        font-family: Arial, sans-serif;
+        font-family: Noto Sans, sans-serif;
         background: #f7f7f7;
       }
 
       /* Header styling */
       header {
+        text-align: center;
         position: fixed;
         top: 0;
         width: 100%;
         z-index: 1000;
-        background: rgba(0, 63, 92, 0.9);
-        backdrop-filter: blur(6px);
-}
+        background: #003f5c;
+        color: white;
+    }
 
       /* Soft shadow around the map */
      #map {
-      width: 90%;
-      height: 75vh; /* 80% of viewport height */
-      margin: auto;
-    }
-
-    body {
-      padding-top: 220px; /* space for header */
+      position: absolute;
+      top: var(--header-height);
+      left: 0;
+      right: 0;
+      bottom: 0;
     }
 
       /* Custom popup styling */
@@ -119,7 +118,7 @@
         line-height: 1.4;
       }
 
-      /
+      /* Legend title styling */
       .legend h4 {
         margin: 0 0 6px;
         font-size: 15px;
